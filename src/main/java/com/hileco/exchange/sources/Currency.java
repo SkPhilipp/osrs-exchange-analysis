@@ -11,21 +11,28 @@ public class Currency {
      * 20.0b --> 20000000000.0
      */
     public static BigDecimal from(String officialNumber) {
-        var numberComponent = officialNumber;
-        var multiplier = new BigDecimal(1);
-        if (officialNumber.endsWith("k") || officialNumber.endsWith("K")) {
-            numberComponent = officialNumber.substring(0, officialNumber.length() - 1);
-            multiplier = new BigDecimal(1000);
+        try {
+            var numberComponent = officialNumber;
+            var multiplier = new BigDecimal(1);
+            if (officialNumber.endsWith("k") || officialNumber.endsWith("K")) {
+                numberComponent = officialNumber.substring(0, officialNumber.length() - 1);
+                multiplier = new BigDecimal(1000);
+            }
+            if (officialNumber.endsWith("m") || officialNumber.endsWith("M")) {
+                numberComponent = officialNumber.substring(0, officialNumber.length() - 1);
+                multiplier = new BigDecimal(1000000);
+            }
+            if (officialNumber.endsWith("b") || officialNumber.endsWith("B")) {
+                numberComponent = officialNumber.substring(0, officialNumber.length() - 1);
+                multiplier = new BigDecimal(1000000000);
+            }
+            var number = numberComponent.replaceAll("\\s", "")
+                    .replaceAll("\\+", "")
+                    .replaceAll("\\,", "");
+            return new BigDecimal(number).multiply(multiplier);
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            throw e;
         }
-        if (officialNumber.endsWith("m") || officialNumber.endsWith("M")) {
-            numberComponent = officialNumber.substring(0, officialNumber.length() - 1);
-            multiplier = new BigDecimal(1000000);
-        }
-        if (officialNumber.endsWith("b") || officialNumber.endsWith("B")) {
-            numberComponent = officialNumber.substring(0, officialNumber.length() - 1);
-            multiplier = new BigDecimal(1000000000);
-        }
-        var number = new BigDecimal(numberComponent);
-        return number.multiply(multiplier);
     }
 }

@@ -11,6 +11,7 @@ import org.bson.Document;
 
 import java.time.LocalDateTime;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class Application {
 
@@ -30,13 +31,22 @@ public class Application {
         var grandExchange = mongoClient.getDatabase("grandexchange");
         var items = grandExchange.getCollection("items");
         var osBuddyViews = osBuddySource.views();
+        var resumeFrom = "1081";
+        var resuming = new AtomicReference<>(true);
         osBuddyViews.forEach((s, osBuddyView) -> {
-            System.out.println(String.format("Processing %s", s));
-            items.insertOne(process(s, osBuddyViews));
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            if (resumeFrom.equals(s)) {
+                resuming.set(false);
+            }
+            if (resuming.get()) {
+                System.out.println(String.format("Skipping %s", s));
+            } else {
+                System.out.println(String.format("Processing %s", s));
+                items.insertOne(process(s, osBuddyViews));
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }

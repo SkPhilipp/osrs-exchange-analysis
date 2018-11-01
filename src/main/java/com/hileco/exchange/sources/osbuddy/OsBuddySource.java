@@ -3,9 +3,7 @@ package com.hileco.exchange.sources.osbuddy;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hileco.exchange.sources.Currency;
 import com.mashape.unirest.http.Unirest;
-import org.json.JSONException;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,25 +19,24 @@ public class OsBuddySource {
         try {
             var responseStream = Unirest.get("https://storage.googleapis.com/osbuddy-exchange/summary.json")
                     .header("accept", "application/json")
-                    .getBody()
-                    .getEntity()
-                    .getContent();
+                    .asBinary()
+                    .getBody();
             var result = OBJECT_MAPPER.readTree(responseStream);
             result.fieldNames().forEachRemaining(itemId -> {
                 var osBuddyView = new OsBuddyView();
                 var item = result.get(itemId);
-                osBuddyView.name().set(item.get("name").textValue());
-                osBuddyView.members().set(item.get("members").booleanValue());
-                osBuddyView.sp().set(Currency.from(item.get("sp").textValue());
-                osBuddyView.buyAverage().set(Currency.from(item.get("buy_average").textValue()));
-                osBuddyView.buyQuantity().set(Currency.from(item.get("buy_quantity").textValue()));
-                osBuddyView.sellAverage().set(Currency.from(item.get("sell_average").textValue()));
-                osBuddyView.sellQuantity().set(Currency.from(item.get("sell_quantity").textValue()));
-                osBuddyView.overallAverage().set(Currency.from(item.get("overall_average").textValue()));
-                osBuddyView.overallQuantity().set(Currency.from(item.get("overall_quantity").textValue()));
+                osBuddyView.name().set(item.get("name").asText());
+                osBuddyView.members().set(item.get("members").asBoolean());
+                osBuddyView.sp().set(Currency.from(item.get("sp").asText()));
+                osBuddyView.buyAverage().set(Currency.from(item.get("buy_average").asText()));
+                osBuddyView.buyQuantity().set(Currency.from(item.get("buy_quantity").asText()));
+                osBuddyView.sellAverage().set(Currency.from(item.get("sell_average").asText()));
+                osBuddyView.sellQuantity().set(Currency.from(item.get("sell_quantity").asText()));
+                osBuddyView.overallAverage().set(Currency.from(item.get("overall_average").asText()));
+                osBuddyView.overallQuantity().set(Currency.from(item.get("overall_quantity").asText()));
                 mapping.put(itemId, osBuddyView);
             });
-        } catch (JSONException | IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return mapping;

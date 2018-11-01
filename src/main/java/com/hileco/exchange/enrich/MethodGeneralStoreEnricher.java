@@ -4,7 +4,13 @@ import com.hileco.exchange.sources.osbuddy.OsBuddyView;
 import com.hileco.exchange.sources.wikia.WikiaView;
 import org.bson.Document;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 public class MethodGeneralStoreEnricher {
+
+    private static final BigDecimal GENERAL_STORE_MULTIPLIER = new BigDecimal("0.26");
+    private static final BigDecimal GENERAL_STORE_SELL_STACK_SIZE = new BigDecimal("50");
 
     public void enrich(Document document) {
         var osBuddyView = new OsBuddyView(document);
@@ -12,11 +18,11 @@ public class MethodGeneralStoreEnricher {
         if (osBuddyView.isAvailable() && wikiaView.isAvailable()) {
             wikiaView.highAlchemy().get();
             wikiaView.lowAlchemy().get();
-            int price = (int) ((float) wikiaView.lowAlchemy().get() * 0.26f);
-            int profit = price - osBuddyView.sellAverage().get();
-            int profitPerClick = profit * 50;
-            int profitPercent = profit * 100 / osBuddyView.sellAverage().get();
-            boolean profitable = profit > 0;
+            var price = wikiaView.lowAlchemy().get().multiply(GENERAL_STORE_MULTIPLIER);
+            var profit = price.subtract(osBuddyView.sellAverage().get());
+            var profitPerClick = profit.multiply(GENERAL_STORE_SELL_STACK_SIZE);
+            var profitPercent = profit.divide(osBuddyView.sellAverage().get(), RoundingMode.HALF_DOWN);
+            var profitable = profit.compareTo(BigDecimal.ZERO) > 0;
             osBuddyView.sellAverage().get();
             var method = new MethodGeneralStoreView(document);
             method.profit().set(profit);

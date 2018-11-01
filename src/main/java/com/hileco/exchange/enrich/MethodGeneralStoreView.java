@@ -4,6 +4,8 @@ import com.hileco.exchange.sources.ValueReference;
 import com.hileco.exchange.sources.View;
 import org.bson.Document;
 
+import java.math.BigDecimal;
+
 public class MethodGeneralStoreView extends View {
     private static final String VIEW_NAME = "methodGeneralStore";
 
@@ -12,15 +14,15 @@ public class MethodGeneralStoreView extends View {
         super.initialize();
     }
 
-    public ValueReference<Integer> profit() {
+    public ValueReference<BigDecimal> profit() {
         return new ValueReference<>(this.get(), "profit");
     }
 
-    public ValueReference<Integer> profitPerClick() {
+    public ValueReference<BigDecimal> profitPerClick() {
         return new ValueReference<>(this.get(), "profitPerClick");
     }
 
-    public ValueReference<Integer> profitPercent() {
+    public ValueReference<BigDecimal> profitPercent() {
         return new ValueReference<>(this.get(), "profitPercent");
     }
 

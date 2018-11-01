@@ -4,6 +4,9 @@ import com.hileco.exchange.sources.official.OfficialView;
 import com.hileco.exchange.sources.osbuddy.OsBuddyView;
 import org.bson.Document;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 public class MethodNormalResellEnricher {
 
     public void enrich(Document document) {
@@ -12,9 +15,9 @@ public class MethodNormalResellEnricher {
         if (osBuddyView.isAvailable() && officialView.isAvailable()) {
             var osBuddyBuyAverage = osBuddyView.buyAverage().get();
             var officialPrice = officialView.price().get();
-            var profit = osBuddyBuyAverage - officialPrice;
-            var profitPercent = profit * 100 / officialPrice;
-            var profitable = profit > 0;
+            var profit = osBuddyBuyAverage.subtract(officialPrice);
+            var profitPercent = profit.divide(officialPrice, RoundingMode.HALF_DOWN);
+            var profitable = profit.compareTo(BigDecimal.ZERO) > 0;
             var method = new MethodNormalResellView(document);
             method.profit().set(profit);
             method.profitPercent().set(profitPercent);
