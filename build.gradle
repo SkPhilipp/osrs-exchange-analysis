@@ -1,0 +1,19 @@
+plugins {
+    id 'java'
+}
+
+group 'com.hileco'
+version '1'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.9.7'
+    compile 'com.mashape.unirest:unirest-java:1.4.9'
+    compile 'org.mongodb:mongodb-driver-sync:3.8.2'
+    testCompile 'junit:junit:4.12'
+}
