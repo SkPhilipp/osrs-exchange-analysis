@@ -6,11 +6,11 @@ import com.hileco.exchange.sources.official.OfficialSource;
 import com.hileco.exchange.sources.osbuddy.OsBuddySource;
 import com.hileco.exchange.sources.osbuddy.OsBuddyView;
 import com.hileco.exchange.sources.wikia.WikiaSource;
-import com.mongodb.client.MongoClients;
 import org.bson.Document;
 
 import java.time.LocalDateTime;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class Application {
@@ -20,29 +20,29 @@ public class Application {
     private final WikiaSource wikiaSource = new WikiaSource();
     private final MethodGeneralStoreEnricher methodGeneralStoreEnricher = new MethodGeneralStoreEnricher();
     private final MethodNormalResellEnricher methodNormalResellEnricher = new MethodNormalResellEnricher();
+    private final Database database = new Database();
 
     public static void main(String[] args) {
         var application = new Application();
-        application.main();
+        application.run();
     }
 
-    private void main() {
-        var mongoClient = MongoClients.create("mongodb+srv://pepe:VzGP54FpW7ctWaTh@thegrandexchange-zules.azure.mongodb.net/test?retryWrites=true");
-        var grandExchange = mongoClient.getDatabase("grandexchange");
-        var items = grandExchange.getCollection("items");
+    private void run() {
         var osBuddyViews = osBuddySource.views();
-        var resumeFrom = "9143";
+        var resumeFrom = "7158";
         var resuming = new AtomicReference<>(true);
+        var skipping = new AtomicInteger(0);
         osBuddyViews.forEach((s, osBuddyView) -> {
             // TODO: Instead query mongo to whether the item should be (GE-)updated
             if (resumeFrom.equals(s)) {
+                System.out.println(String.format("Skipped %d of %d", skipping.get(), osBuddyViews.size()));
                 resuming.set(false);
             }
             if (resuming.get()) {
-                System.out.println(String.format("Skipping %s", s));
+                skipping.getAndIncrement();
             } else {
                 System.out.println(String.format("Processing %s", s));
-                items.insertOne(process(s, osBuddyViews));
+                database.getItems().insertOne(process(s, osBuddyViews));
                 try {
                     Thread.sleep(5000);
                 } catch (InterruptedException e) {
