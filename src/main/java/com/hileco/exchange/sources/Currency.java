@@ -10,25 +10,25 @@ public class Currency {
      * 20.0m --> 20000000.0
      * 20.0b --> 20000000000.0
      */
-    public static BigDecimal from(String officialNumber) {
+    public static BigDecimal from(String input) {
         try {
-            var numberComponent = officialNumber;
-            var multiplier = new BigDecimal(1);
-            if (officialNumber.endsWith("k") || officialNumber.endsWith("K")) {
-                numberComponent = officialNumber.substring(0, officialNumber.length() - 1);
-                multiplier = new BigDecimal(1000);
-            }
-            if (officialNumber.endsWith("m") || officialNumber.endsWith("M")) {
-                numberComponent = officialNumber.substring(0, officialNumber.length() - 1);
-                multiplier = new BigDecimal(1000000);
-            }
-            if (officialNumber.endsWith("b") || officialNumber.endsWith("B")) {
-                numberComponent = officialNumber.substring(0, officialNumber.length() - 1);
-                multiplier = new BigDecimal(1000000000);
-            }
-            var number = numberComponent.replaceAll("\\s", "")
+            var normalized = input.replaceAll("\\s", "")
                     .replaceAll("\\+", "")
                     .replaceAll("\\,", "");
+            String number;
+            var multiplier = new BigDecimal(1);
+            if (normalized.endsWith("k") || normalized.endsWith("K")) {
+                number = normalized.substring(0, normalized.length() - 1);
+                multiplier = new BigDecimal(1000);
+            } else if (normalized.endsWith("m") || normalized.endsWith("M")) {
+                number = normalized.substring(0, normalized.length() - 1);
+                multiplier = new BigDecimal(1000000);
+            } else if (normalized.endsWith("b") || normalized.endsWith("B")) {
+                number = normalized.substring(0, normalized.length() - 1);
+                multiplier = new BigDecimal(1000000000);
+            } else {
+                number = normalized;
+            }
             return new BigDecimal(number).multiply(multiplier);
         } catch (NumberFormatException e) {
             e.printStackTrace();

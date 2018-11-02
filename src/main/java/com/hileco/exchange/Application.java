@@ -31,9 +31,10 @@ public class Application {
         var grandExchange = mongoClient.getDatabase("grandexchange");
         var items = grandExchange.getCollection("items");
         var osBuddyViews = osBuddySource.views();
-        var resumeFrom = "1081";
+        var resumeFrom = "9143";
         var resuming = new AtomicReference<>(true);
         osBuddyViews.forEach((s, osBuddyView) -> {
+            // TODO: Instead query mongo to whether the item should be (GE-)updated
             if (resumeFrom.equals(s)) {
                 resuming.set(false);
             }
