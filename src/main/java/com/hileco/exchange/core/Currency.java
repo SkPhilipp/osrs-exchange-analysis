@@ -8,7 +8,7 @@ public class Currency {
      * 20.0m --> 20000000.0
      * 20.0b --> 20000000000.0
      */
-    public static Double from(String input) {
+    public static Double parse(String input) {
         try {
             var normalized = input.replaceAll("\\s", "")
                     .replaceAll("\\+", "")

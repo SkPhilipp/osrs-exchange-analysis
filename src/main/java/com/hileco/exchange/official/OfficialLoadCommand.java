@@ -40,8 +40,8 @@ public class OfficialLoadCommand implements Runnable {
                     var officialView = new OfficialView(document);
                     officialView.id().set(itemId);
                     officialView.timestamp().set(timestamp);
-                    officialView.price().set(Currency.from(item.get("current").get("price").asText()));
-                    officialView.priceChange().set(Currency.from(item.get("today").get("price").asText()));
+                    officialView.price().set(Currency.parse(item.get("current").get("price").asText()));
+                    officialView.priceChange().set(Currency.parse(item.get("today").get("price").asText()));
                     officialView.price180().set(item.get("day180").get("change").asText());
                     officialView.price90().set(item.get("day90").get("change").asText());
                     officialView.price30().set(item.get("day30").get("change").asText());
