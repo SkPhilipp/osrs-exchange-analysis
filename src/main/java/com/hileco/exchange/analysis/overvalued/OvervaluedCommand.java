@@ -1,8 +1,8 @@
-package com.hileco.exchange.commands;
+package com.hileco.exchange.analysis.overvalued;
 
-import com.hileco.exchange.Database;
-import com.hileco.exchange.sources.official.OfficialView;
-import com.hileco.exchange.sources.osbuddy.OsBuddyView;
+import com.hileco.exchange.core.Database;
+import com.hileco.exchange.official.OfficialView;
+import com.hileco.exchange.osbuddy.OsBuddyView;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Sorts;
 import picocli.CommandLine;
@@ -11,7 +11,7 @@ import picocli.CommandLine;
         description = "Analysis method retrieving the top overvalued items.",
         name = "overvalued",
         mixinStandardHelpOptions = true)
-public class Overvalued implements Runnable {
+public class OvervaluedCommand implements Runnable {
 
     @Override
     public void run() {

@@ -1,7 +1,7 @@
-package com.hileco.exchange.sources.osbuddy;
+package com.hileco.exchange.osbuddy;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hileco.exchange.sources.Currency;
+import com.hileco.exchange.core.Currency;
 import com.mashape.unirest.http.Unirest;
 
 import java.util.HashMap;

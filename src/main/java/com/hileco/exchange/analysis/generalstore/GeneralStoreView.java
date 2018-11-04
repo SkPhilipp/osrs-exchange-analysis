@@ -1,21 +1,25 @@
-package com.hileco.exchange.enrich;
+package com.hileco.exchange.analysis.generalstore;
 
-import com.hileco.exchange.sources.ValueReference;
-import com.hileco.exchange.sources.View;
+import com.hileco.exchange.core.ValueReference;
+import com.hileco.exchange.core.View;
 import org.bson.Document;
 
 import java.math.BigDecimal;
 
-public class MethodNormalResellView extends View {
-    private static final String VIEW_NAME = "methodNormalResell";
+public class GeneralStoreView extends View {
+    private static final String VIEW_NAME = "methodGeneralStore";
 
-    public MethodNormalResellView(Document document) {
+    public GeneralStoreView(Document document) {
         super(document, VIEW_NAME);
         super.initialize();
     }
 
     public ValueReference<BigDecimal> profit() {
         return new ValueReference<>(this.get(), "profit");
+    }
+
+    public ValueReference<BigDecimal> profitPerClick() {
+        return new ValueReference<>(this.get(), "profitPerClick");
     }
 
     public ValueReference<BigDecimal> profitPercent() {
@@ -30,6 +34,7 @@ public class MethodNormalResellView extends View {
     public boolean isAvailable() {
         return this.get() != null
                 && profit().exists()
+                && profitPerClick().exists()
                 && profitPercent().exists()
                 && profitable().exists();
     }

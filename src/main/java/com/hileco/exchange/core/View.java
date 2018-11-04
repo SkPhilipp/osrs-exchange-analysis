@@ -1,4 +1,4 @@
-package com.hileco.exchange.sources;
+package com.hileco.exchange.core;
 
 import org.bson.Document;
 

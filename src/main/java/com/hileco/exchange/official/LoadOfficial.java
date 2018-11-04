@@ -1,4 +1,4 @@
-package com.hileco.exchange.commands;
+package com.hileco.exchange.official;
 
 import picocli.CommandLine;
 
@@ -6,7 +6,7 @@ import picocli.CommandLine;
         description = "Loads in the official source.",
         name = "loadofficial",
         mixinStandardHelpOptions = true)
-class LoadOfficial implements Runnable {
+public class LoadOfficial implements Runnable {
 
     @CommandLine.Option(names = {"-l", "--loop"}, description = "Continue loading indefinitely.")
     private boolean loop = false;

@@ -1,4 +1,4 @@
-package com.hileco.exchange.sources.wikia;
+package com.hileco.exchange.wikia;
 
 public class WikiaSource {
 

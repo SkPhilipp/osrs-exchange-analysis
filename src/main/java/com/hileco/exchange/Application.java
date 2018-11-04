@@ -1,11 +1,10 @@
 package com.hileco.exchange;
 
-import com.hileco.exchange.enrich.MethodGeneralStoreEnricher;
-import com.hileco.exchange.enrich.MethodNormalResellEnricher;
-import com.hileco.exchange.sources.official.OfficialSource;
-import com.hileco.exchange.sources.osbuddy.OsBuddySource;
-import com.hileco.exchange.sources.osbuddy.OsBuddyView;
-import com.hileco.exchange.sources.wikia.WikiaSource;
+import com.hileco.exchange.core.Database;
+import com.hileco.exchange.official.OfficialSource;
+import com.hileco.exchange.osbuddy.OsBuddySource;
+import com.hileco.exchange.osbuddy.OsBuddyView;
+import com.hileco.exchange.wikia.WikiaSource;
 import org.bson.Document;
 
 import java.time.LocalDateTime;
@@ -18,8 +17,6 @@ public class Application {
     private final OfficialSource officialSource = new OfficialSource();
     private final OsBuddySource osBuddySource = new OsBuddySource();
     private final WikiaSource wikiaSource = new WikiaSource();
-    private final MethodGeneralStoreEnricher methodGeneralStoreEnricher = new MethodGeneralStoreEnricher();
-    private final MethodNormalResellEnricher methodNormalResellEnricher = new MethodNormalResellEnricher();
     private final Database database = new Database();
 
     public static void main(String[] args) {
@@ -68,8 +65,6 @@ public class Application {
         if (wikiaView.isAvailable()) {
             wikiaView.writeInto(document);
         }
-        methodGeneralStoreEnricher.enrich(document);
-        methodNormalResellEnricher.enrich(document);
         return document;
     }
 }

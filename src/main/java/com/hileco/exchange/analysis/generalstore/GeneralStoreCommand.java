@@ -1,17 +1,19 @@
-package com.hileco.exchange.enrich;
+package com.hileco.exchange.analysis.generalstore;
 
-import com.hileco.exchange.sources.osbuddy.OsBuddyView;
-import com.hileco.exchange.sources.wikia.WikiaView;
+import com.hileco.exchange.analysis.Enricher;
+import com.hileco.exchange.osbuddy.OsBuddyView;
+import com.hileco.exchange.wikia.WikiaView;
 import org.bson.Document;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-public class MethodGeneralStoreEnricher {
+public class GeneralStoreCommand implements Enricher {
 
     private static final BigDecimal GENERAL_STORE_MULTIPLIER = new BigDecimal("0.26");
     private static final BigDecimal GENERAL_STORE_SELL_STACK_SIZE = new BigDecimal("50");
 
+    @Override
     public void enrich(Document document) {
         var osBuddyView = new OsBuddyView(document);
         var wikiaView = new WikiaView(document);
@@ -24,7 +26,7 @@ public class MethodGeneralStoreEnricher {
             var profitPercent = profit.divide(osBuddyView.sellAverage().get(), RoundingMode.HALF_DOWN);
             var profitable = profit.compareTo(BigDecimal.ZERO) > 0;
             osBuddyView.sellAverage().get();
-            var method = new MethodGeneralStoreView(document);
+            var method = new GeneralStoreView(document);
             method.profit().set(profit);
             method.profitPerClick().set(profitPerClick);
             method.profitPercent().set(profitPercent);

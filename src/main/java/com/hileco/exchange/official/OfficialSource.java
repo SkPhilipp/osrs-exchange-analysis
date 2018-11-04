@@ -1,7 +1,7 @@
-package com.hileco.exchange.sources.official;
+package com.hileco.exchange.official;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hileco.exchange.sources.Currency;
+import com.hileco.exchange.core.Currency;
 import com.mashape.unirest.http.Unirest;
 
 public class OfficialSource {

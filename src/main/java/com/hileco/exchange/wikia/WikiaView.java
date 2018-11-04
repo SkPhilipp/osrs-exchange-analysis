@@ -1,7 +1,7 @@
-package com.hileco.exchange.sources.wikia;
+package com.hileco.exchange.wikia;
 
-import com.hileco.exchange.sources.ValueReference;
-import com.hileco.exchange.sources.View;
+import com.hileco.exchange.core.ValueReference;
+import com.hileco.exchange.core.View;
 import org.bson.Document;
 
 import java.math.BigDecimal;

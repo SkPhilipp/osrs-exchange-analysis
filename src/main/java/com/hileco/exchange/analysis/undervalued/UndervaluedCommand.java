@@ -1,17 +1,22 @@
-package com.hileco.exchange.commands;
+package com.hileco.exchange.analysis.undervalued;
 
-import com.hileco.exchange.Database;
-import com.hileco.exchange.sources.official.OfficialView;
-import com.hileco.exchange.sources.osbuddy.OsBuddyView;
+import com.hileco.exchange.analysis.Enricher;
+import com.hileco.exchange.core.Database;
+import com.hileco.exchange.official.OfficialView;
+import com.hileco.exchange.osbuddy.OsBuddyView;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Sorts;
+import org.bson.Document;
 import picocli.CommandLine;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 @CommandLine.Command(
         description = "Analysis method retrieving the top undervalued items.",
         name = "undervalued",
         mixinStandardHelpOptions = true)
-public class Undervalued implements Runnable {
+public class UndervaluedCommand implements Runnable, Enricher {
 
     @Override
     public void run() {
@@ -24,9 +29,9 @@ public class Undervalued implements Runnable {
                                          "BUY_AVG",
                                          "BUY_QTY"));
         database.getItems()
-                .find(Filters.and(Filters.gte("methodUndervaluedResell.profitPercent", 1),
+                .find(Filters.and(Filters.gte("methodNormalResell.profitPercent", 1),
                                   Filters.gte("osBuddy.buyQuantity", 50)))
-                .sort(Sorts.descending("methodUndervaluedResell.profitPercent"))
+                .sort(Sorts.descending("methodNormalResell.profitPercent"))
                 .spliterator()
                 .forEachRemaining(document -> {
                     var officialView = new OfficialView(document);
@@ -39,5 +44,22 @@ public class Undervalued implements Runnable {
                                                      osBuddyView.buyAverage().get(),
                                                      osBuddyView.buyQuantity().get()));
                 });
+    }
+
+    @Override
+    public void enrich(Document document) {
+        var osBuddyView = new OsBuddyView(document);
+        var officialView = new OfficialView(document);
+        if (osBuddyView.isAvailable() && officialView.isAvailable()) {
+            var osBuddyBuyAverage = osBuddyView.buyAverage().get();
+            var officialPrice = officialView.price().get();
+            var profit = osBuddyBuyAverage.subtract(officialPrice);
+            var profitPercent = profit.divide(officialPrice, RoundingMode.HALF_DOWN);
+            var profitable = profit.compareTo(BigDecimal.ZERO) > 0;
+            var method = new UndervaluedView(document);
+            method.profit().set(profit);
+            method.profitPercent().set(profitPercent);
+            method.profitable().set(profitable);
+        }
     }
 }

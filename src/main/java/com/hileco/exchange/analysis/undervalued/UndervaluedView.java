@@ -1,25 +1,21 @@
-package com.hileco.exchange.enrich;
+package com.hileco.exchange.analysis.undervalued;
 
-import com.hileco.exchange.sources.ValueReference;
-import com.hileco.exchange.sources.View;
+import com.hileco.exchange.core.ValueReference;
+import com.hileco.exchange.core.View;
 import org.bson.Document;
 
 import java.math.BigDecimal;
 
-public class MethodGeneralStoreView extends View {
-    private static final String VIEW_NAME = "methodGeneralStore";
+public class UndervaluedView extends View {
+    private static final String VIEW_NAME = "methodNormalResell";
 
-    public MethodGeneralStoreView(Document document) {
+    public UndervaluedView(Document document) {
         super(document, VIEW_NAME);
         super.initialize();
     }
 
     public ValueReference<BigDecimal> profit() {
         return new ValueReference<>(this.get(), "profit");
-    }
-
-    public ValueReference<BigDecimal> profitPerClick() {
-        return new ValueReference<>(this.get(), "profitPerClick");
     }
 
     public ValueReference<BigDecimal> profitPercent() {
@@ -34,7 +30,6 @@ public class MethodGeneralStoreView extends View {
     public boolean isAvailable() {
         return this.get() != null
                 && profit().exists()
-                && profitPerClick().exists()
                 && profitPercent().exists()
                 && profitable().exists();
     }

@@ -1,4 +1,4 @@
-package com.hileco.exchange;
+package com.hileco.exchange.core;
 
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;

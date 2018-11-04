@@ -1,15 +1,20 @@
-package com.hileco.exchange.commands;
+package com.hileco.exchange;
 
+import com.hileco.exchange.analysis.overvalued.OvervaluedCommand;
+import com.hileco.exchange.analysis.undervalued.UndervaluedCommand;
+import com.hileco.exchange.official.LoadOfficial;
+import com.hileco.exchange.osbuddy.LoadOsBuddy;
 import picocli.CommandLine;
 
 import java.util.concurrent.Callable;
 
 import static picocli.CommandLine.Command;
 
-@Command(description = "Tool for working with a virtual economy.", name = "ge", subcommands = {
+@Command(description = "Tool for working with a virtual economy.", name = "exchange", subcommands = {
         LoadOfficial.class,
         LoadOsBuddy.class,
-        Undervalued.class
+        UndervaluedCommand.class,
+        OvervaluedCommand.class
 })
 public class Commands {
 
