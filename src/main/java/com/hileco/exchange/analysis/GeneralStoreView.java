@@ -20,4 +20,16 @@ public class GeneralStoreView {
     public ValueReference<LocalDateTime> timestamp() {
         return new ValueReference<>(document, "timestamp");
     }
+
+    public ValueReference<Double> deltaAbsolute() {
+        return new ValueReference<>(document, "deltaAbsolute");
+    }
+
+    public ValueReference<Double> deltaAbsoluteStack() {
+        return new ValueReference<>(document, "deltaAbsoluteStack");
+    }
+
+    public ValueReference<Double> deltaPercent() {
+        return new ValueReference<>(document, "deltaPercent");
+    }
 }

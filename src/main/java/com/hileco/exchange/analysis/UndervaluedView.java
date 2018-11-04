@@ -20,4 +20,12 @@ public class UndervaluedView {
     public ValueReference<LocalDateTime> timestamp() {
         return new ValueReference<>(document, "timestamp");
     }
+
+    public ValueReference<Double> deltaAbsolute() {
+        return new ValueReference<>(document, "deltaAbsolute");
+    }
+
+    public ValueReference<Double> deltaPercent() {
+        return new ValueReference<>(document, "deltaPercent");
+    }
 }

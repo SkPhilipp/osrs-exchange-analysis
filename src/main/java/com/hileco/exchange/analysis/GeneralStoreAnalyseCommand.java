@@ -2,9 +2,11 @@ package com.hileco.exchange.analysis;
 
 import com.hileco.exchange.core.Database;
 import com.hileco.exchange.official.OfficialView;
-import com.hileco.exchange.osbuddy.OsBuddyView;
+import com.hileco.exchange.wikia.WikiaView;
 import com.mongodb.client.model.Filters;
-import com.mongodb.client.model.Sorts;
+import org.bson.Document;
+
+import java.time.LocalDateTime;
 
 import static picocli.CommandLine.Command;
 import static picocli.CommandLine.Option;
@@ -13,71 +15,38 @@ import static picocli.CommandLine.Option;
         name = "analyse-general-store")
 public class GeneralStoreAnalyseCommand implements Runnable {
 
-//    private static final BigDecimal GENERAL_STORE_MULTIPLIER = new BigDecimal("0.26");
-//    private static final Double GENERAL_STORE_SELL_STACK_SIZE = new Double("50");
+    private static final double GENERAL_STORE_MULTIPLIER = 50d;
+    private static final double GENERAL_STORE_SELL_STACK_SIZE = 50d;
 
-    @Option(names = {"-r", "--reload"}, description = "Whether to reload analysis data.")
-    private boolean reload = false;
-
-//        var osBuddyView = new OsBuddyView(document);
-//        var wikiaView = new WikiaView(document);
-//        if (osBuddyView.isAvailable() && wikiaView.isAvailable()) {
-//            wikiaView.highAlchemy().get();
-//            wikiaView.lowAlchemy().get();
-//            var price = wikiaView.lowAlchemy().get().multiply(GENERAL_STORE_MULTIPLIER);
-//            var profit = price.subtract(osBuddyView.sellAverage().get());
-//            var profitPerClick = profit.multiply(GENERAL_STORE_SELL_STACK_SIZE);
-//            var profitPercent = profit.divide(osBuddyView.sellAverage().get(), RoundingMode.HALF_DOWN);
-//            var profitable = profit.compareTo(Double.ZERO) > 0;
-//            osBuddyView.sellAverage().get();
-//            var method = new GeneralStoreView(document);
-//            method.profit().set(profit);
-//            method.profitPerClick().set(profitPerClick);
-//            method.profitPercent().set(profitPercent);
-//            method.profitable().set(profitable);
-//        }
+    @Option(names = {"-d", "--delete"}, description = "Whether to delete all previous analysis data.")
+    private boolean delete = false;
 
     @Override
     public void run() {
+        var timestamp = LocalDateTime.now();
         var database = new Database();
-        var distinctIds = database.getSourceOsBuddy().distinct("id", String.class).batchSize(100);
-        distinctIds.spliterator().forEachRemaining(itemId -> {
-            System.out.println(itemId);
-            var latestOsBuddy = database.getSourceOsBuddy()
-                    .find(Filters.eq("id", itemId))
-                    .sort(Sorts.descending("timestamp"))
-                    .limit(1)
-                    .iterator();
-            var latestOfficial = database.getSourceOfficial()
-                    .find(Filters.eq("id", itemId))
-                    .sort(Sorts.descending("timestamp"))
-                    .limit(1)
-                    .iterator();
-            if (latestOsBuddy.hasNext() && latestOfficial.hasNext()) {
-                var officialView = new OfficialView(latestOfficial.next());
-                var osBuddyView = new OsBuddyView(latestOsBuddy.next());
-                System.out.println(String.format("-------------- %s", itemId));
-                System.out.println(officialView.price().get());
-                System.out.println(osBuddyView.buyAverage().get());
-                System.out.println(osBuddyView.buyQuantity().get());
-                System.out.println(osBuddyView.sellAverage().get());
-                System.out.println(osBuddyView.sellQuantity().get());
+        database.findIds(database.getSourceOsBuddy()).forEachRemaining(id -> {
+            var latestWikia = database.findLast(database.getSourceWikia(), id);
+            var latestOfficial = database.findLast(database.getSourceOfficial(), id);
+            if (latestWikia.isPresent() && latestOfficial.isPresent()) {
+                var wikia = new WikiaView(latestWikia.get());
+                var official = new OfficialView(latestOfficial.get());
+                var generalStorePrice = wikia.lowAlchemy().get() * GENERAL_STORE_MULTIPLIER;
+                var deltaAbsolute = generalStorePrice - official.price().get();
+                if (deltaAbsolute > 0) {
+                    var document = new Document();
+                    var generalStore = new GeneralStoreView(document);
+                    generalStore.id().set(id);
+                    generalStore.timestamp().set(timestamp);
+                    generalStore.deltaAbsolute().set(deltaAbsolute);
+                    generalStore.deltaAbsoluteStack().set(deltaAbsolute * GENERAL_STORE_SELL_STACK_SIZE);
+                    generalStore.deltaPercent().set(deltaAbsolute * 100 / official.price().get());
+                    database.getMethodOvervalued().insertOne(document);
+                }
             }
-            latestOsBuddy.close();
-            latestOfficial.close();
         });
-
-        // Do a reload ?
-
-        // If so delete all previous entries, and add all new entries
-
-        // Grab the top ones by mongo query
-
-        System.out.println(String.format("%24s %9s %9s %9s %9s",
-                                         "NAME",
-                                         "PRICE",
-                                         "SELL_AVG",
-                                         "SELL_QTY",
-                                         "STORE_PRICE"));
+        if (delete) {
+            database.getMethodOvervalued().deleteMany(Filters.lt("timestamp", timestamp));
+        }
     }
 }

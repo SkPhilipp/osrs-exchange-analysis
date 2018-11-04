@@ -10,6 +10,7 @@ import com.mongodb.client.model.Sorts;
 import org.bson.Document;
 
 import java.util.Optional;
+import java.util.Spliterator;
 
 public class Database {
 
@@ -17,12 +18,14 @@ public class Database {
     private static final String DATABASE_NAME = "grandexchange";
     private static final String COLLECTION_SOURCE_OS_BUDDY = "sourceOsBuddy";
     private static final String COLLECTION_SOURCE_OFFICIAL = "sourceOfficial";
+    private static final String COLLECTION_SOURCE_WIKIA = "sourceWikia";
     private static final String COLLECTION_METHOD_UNDERVALUED = "methodUndervalued";
     private static final String COLLECTION_METHOD_OVERVALUED = "methodOvervalued";
     private static final String COLLECTION_METHOD_GENERAL_STORE = "methodGeneralStore";
 
     private final MongoCollection<Document> sourceOsBuddy;
     private final MongoCollection<Document> sourceOfficial;
+    private final MongoCollection<Document> sourceWikia;
     private final MongoCollection<Document> methodUndervalued;
     private final MongoCollection<Document> methodOvervalued;
     private final MongoCollection<Document> methodGeneralStore;
@@ -32,6 +35,7 @@ public class Database {
         MongoDatabase grandExchange = mongoClient.getDatabase(DATABASE_NAME);
         this.sourceOsBuddy = itemCollection(grandExchange, COLLECTION_SOURCE_OS_BUDDY);
         this.sourceOfficial = itemCollection(grandExchange, COLLECTION_SOURCE_OFFICIAL);
+        this.sourceWikia = itemCollection(grandExchange, COLLECTION_SOURCE_WIKIA);
         this.methodUndervalued = itemCollection(grandExchange, COLLECTION_METHOD_UNDERVALUED);
         this.methodOvervalued = itemCollection(grandExchange, COLLECTION_METHOD_OVERVALUED);
         this.methodGeneralStore = itemCollection(grandExchange, COLLECTION_METHOD_GENERAL_STORE);
@@ -50,6 +54,10 @@ public class Database {
 
     public MongoCollection<Document> getSourceOfficial() {
         return sourceOfficial;
+    }
+
+    public MongoCollection<Document> getSourceWikia() {
+        return sourceWikia;
     }
 
     public MongoCollection<Document> getMethodUndervalued() {
@@ -75,5 +83,9 @@ public class Database {
                 return Optional.empty();
             }
         }
+    }
+
+    public Spliterator<String> findIds(MongoCollection<Document> collection) {
+        return collection.distinct("id", String.class).batchSize(100).spliterator();
     }
 }

@@ -1,10 +1,10 @@
 package com.hileco.exchange;
 
 import com.hileco.exchange.analysis.GeneralStoreAnalyseCommand;
-import com.hileco.exchange.osbuddy.OsBuddyLoadCommand;
 import com.hileco.exchange.analysis.OvervaluedAnalyseCommand;
 import com.hileco.exchange.analysis.UndervaluedAnalyseCommand;
 import com.hileco.exchange.official.OfficialLoadCommand;
+import com.hileco.exchange.osbuddy.OsBuddyLoadCommand;
 import picocli.CommandLine;
 
 import static picocli.CommandLine.Command;
@@ -22,6 +22,7 @@ public class Commands {
         var commandLine = new CommandLine(new Commands());
         var parse = commandLine.parse(args);
         var usage = true;
+        var exitCode = 0;
         for (var entry : parse) {
             var command = entry.getCommand();
             if (command instanceof Runnable) {
@@ -31,6 +32,8 @@ public class Commands {
         }
         if (usage) {
             commandLine.usage(System.err);
+            exitCode = 1;
         }
+        System.exit(exitCode);
     }
 }
