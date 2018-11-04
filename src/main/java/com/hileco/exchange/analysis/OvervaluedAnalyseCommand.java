@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 import static picocli.CommandLine.Command;
 import static picocli.CommandLine.Option;
 
-
 @Command(description = "Analysis method retrieving the top items where the official price is above the actual sell average.",
         name = "analyse-overvalued")
 public class OvervaluedAnalyseCommand implements Runnable {
