@@ -3,8 +3,6 @@ package com.hileco.exchange.analysis;
 import com.hileco.exchange.core.Database;
 import com.hileco.exchange.official.OfficialView;
 import com.hileco.exchange.osbuddy.OsBuddyView;
-import com.mongodb.client.model.Filters;
-import com.mongodb.client.model.Sorts;
 import org.bson.Document;
 
 import java.time.LocalDateTime;
@@ -17,7 +15,8 @@ import static picocli.CommandLine.Option;
         name = "analyse-overvalued")
 public class OvervaluedAnalyseCommand implements Runnable {
 
-    public static final int MINUMUM_SELL_AVERAGE = 5;
+    private static final int MINIMUM_SELL_AVERAGE = 5;
+
     @Option(names = {"-r", "--reload"}, description = "Whether to reload analysis data.")
     private boolean reload = false;
 
@@ -27,20 +26,12 @@ public class OvervaluedAnalyseCommand implements Runnable {
         var database = new Database();
         var distinctIds = database.getSourceOsBuddy().distinct("id", String.class).batchSize(100);
         distinctIds.spliterator().forEachRemaining(itemId -> {
-            var latestOsBuddy = database.getSourceOsBuddy()
-                    .find(Filters.eq("id", itemId))
-                    .sort(Sorts.descending("timestamp"))
-                    .limit(1)
-                    .iterator();
-            var latestOfficial = database.getSourceOfficial()
-                    .find(Filters.eq("id", itemId))
-                    .sort(Sorts.descending("timestamp"))
-                    .limit(1)
-                    .iterator();
-            if (latestOsBuddy.hasNext() && latestOfficial.hasNext()) {
-                var official = new OfficialView(latestOfficial.next());
-                var osBuddy = new OsBuddyView(latestOsBuddy.next());
-                if (osBuddy.sellAverage().get() > MINUMUM_SELL_AVERAGE) {
+            var latestOsBuddy = database.findLast(database.getSourceOsBuddy(), itemId);
+            var latestOfficial = database.findLast(database.getSourceOfficial(), itemId);
+            if (latestOsBuddy.isPresent() && latestOfficial.isPresent()) {
+                var official = new OfficialView(latestOfficial.get());
+                var osBuddy = new OsBuddyView(latestOsBuddy.get());
+                if (osBuddy.sellAverage().get() > MINIMUM_SELL_AVERAGE) {
                     official.price();
                     osBuddy.sellAverage();
                     osBuddy.sellQuantity();
@@ -56,8 +47,6 @@ public class OvervaluedAnalyseCommand implements Runnable {
                     }
                 }
             }
-            latestOsBuddy.close();
-            latestOfficial.close();
         });
     }
 }

@@ -4,8 +4,12 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Indexes;
+import com.mongodb.client.model.Sorts;
 import org.bson.Document;
+
+import java.util.Optional;
 
 public class Database {
 
@@ -58,5 +62,18 @@ public class Database {
 
     public MongoCollection<Document> getMethodGeneralStore() {
         return methodGeneralStore;
+    }
+
+    public Optional<Document> findLast(MongoCollection<Document> collection, String id) {
+        try (var cursor = collection.find(Filters.eq("id", id))
+                .sort(Sorts.descending("timestamp"))
+                .limit(1)
+                .iterator()) {
+            if (cursor.hasNext()) {
+                return Optional.of(cursor.next());
+            } else {
+                return Optional.empty();
+            }
+        }
     }
 }
