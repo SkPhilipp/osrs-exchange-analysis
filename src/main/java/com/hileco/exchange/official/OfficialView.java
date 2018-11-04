@@ -1,76 +1,63 @@
 package com.hileco.exchange.official;
 
 import com.hileco.exchange.core.ValueReference;
-import com.hileco.exchange.core.View;
 import org.bson.Document;
 
-import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
-public class OfficialView extends View {
+public class OfficialView {
 
-    private static final String VIEW_NAME = "official";
+    private final Document document;
 
     public OfficialView(Document document) {
-        super(document, VIEW_NAME);
+        this.document = document;
     }
 
-    public OfficialView() {
-        super(new Document(), "official");
-        super.initialize();
+    public ValueReference<String> id() {
+        return new ValueReference<>(document, "id");
     }
 
-    public ValueReference<BigDecimal> price() {
-        return new ValueReference<>(this.get(), "price");
+    public ValueReference<LocalDateTime> timestamp() {
+        return new ValueReference<>(document, "timestamp");
     }
 
-    public ValueReference<BigDecimal> priceChange() {
-        return new ValueReference<>(this.get(), "priceChange");
+    public ValueReference<Double> price() {
+        return new ValueReference<>(document, "price");
+    }
+
+    public ValueReference<Double> priceChange() {
+        return new ValueReference<>(document, "priceChange");
     }
 
     public ValueReference<String> price180() {
-        return new ValueReference<>(this.get(), "price180");
+        return new ValueReference<>(document, "price180");
     }
 
     public ValueReference<String> price90() {
-        return new ValueReference<>(this.get(), "price90");
+        return new ValueReference<>(document, "price90");
     }
 
     public ValueReference<String> price30() {
-        return new ValueReference<>(this.get(), "price30");
+        return new ValueReference<>(document, "price30");
     }
 
     public ValueReference<String> description() {
-        return new ValueReference<>(this.get(), "description");
+        return new ValueReference<>(document, "description");
     }
 
     public ValueReference<String> icon() {
-        return new ValueReference<>(this.get(), "icon");
+        return new ValueReference<>(document, "icon");
     }
 
     public ValueReference<String> iconLarge() {
-        return new ValueReference<>(this.get(), "iconLarge");
+        return new ValueReference<>(document, "iconLarge");
     }
 
     public ValueReference<Boolean> members() {
-        return new ValueReference<>(this.get(), "members");
+        return new ValueReference<>(document, "members");
     }
 
     public ValueReference<String> name() {
-        return new ValueReference<>(this.get(), "name");
-    }
-
-    @Override
-    public boolean isAvailable() {
-        return this.get() != null
-                && price().exists()
-                && priceChange().exists()
-                && price180().exists()
-                && price90().exists()
-                && price30().exists()
-                && description().exists()
-                && icon().exists()
-                && iconLarge().exists()
-                && members().exists()
-                && name().exists();
+        return new ValueReference<>(document, "name");
     }
 }

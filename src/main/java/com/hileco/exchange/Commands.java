@@ -1,31 +1,31 @@
 package com.hileco.exchange;
 
-import com.hileco.exchange.analysis.overvalued.OvervaluedCommand;
-import com.hileco.exchange.analysis.undervalued.UndervaluedCommand;
-import com.hileco.exchange.official.LoadOfficial;
-import com.hileco.exchange.osbuddy.LoadOsBuddy;
+import com.hileco.exchange.analysis.GeneralStoreAnalyseCommand;
+import com.hileco.exchange.osbuddy.OsBuddyLoadCommand;
+import com.hileco.exchange.analysis.OvervaluedAnalyseCommand;
+import com.hileco.exchange.analysis.UndervaluedAnalyseCommand;
+import com.hileco.exchange.official.OfficialLoadCommand;
 import picocli.CommandLine;
-
-import java.util.concurrent.Callable;
 
 import static picocli.CommandLine.Command;
 
 @Command(description = "Tool for working with a virtual economy.", name = "exchange", subcommands = {
-        LoadOfficial.class,
-        LoadOsBuddy.class,
-        UndervaluedCommand.class,
-        OvervaluedCommand.class
+        OfficialLoadCommand.class,
+        OsBuddyLoadCommand.class,
+        UndervaluedAnalyseCommand.class,
+        OvervaluedAnalyseCommand.class,
+        GeneralStoreAnalyseCommand.class
 })
 public class Commands {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         var commandLine = new CommandLine(new Commands());
         var parse = commandLine.parse(args);
         var usage = true;
         for (var entry : parse) {
             var command = entry.getCommand();
-            if (command instanceof Callable) {
-                ((Callable) command).call();
+            if (command instanceof Runnable) {
+                ((Runnable) command).run();
                 usage = false;
             }
         }

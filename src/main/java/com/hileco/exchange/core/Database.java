@@ -11,21 +11,52 @@ public class Database {
 
     private static final String CONNECTION_STRING = "mongodb+srv://pepe:VzGP54FpW7ctWaTh@thegrandexchange-zules.azure.mongodb.net/test?retryWrites=true";
     private static final String DATABASE_NAME = "grandexchange";
-    private static final String COLLECTION_ITEMS = "items";
+    private static final String COLLECTION_SOURCE_OS_BUDDY = "sourceOsBuddy";
+    private static final String COLLECTION_SOURCE_OFFICIAL = "sourceOfficial";
+    private static final String COLLECTION_METHOD_UNDERVALUED = "methodUndervalued";
+    private static final String COLLECTION_METHOD_OVERVALUED = "methodOvervalued";
+    private static final String COLLECTION_METHOD_GENERAL_STORE = "methodGeneralStore";
 
-    private final MongoClient mongoClient;
-    private final MongoDatabase grandExchange;
-    private final MongoCollection<Document> items;
+    private final MongoCollection<Document> sourceOsBuddy;
+    private final MongoCollection<Document> sourceOfficial;
+    private final MongoCollection<Document> methodUndervalued;
+    private final MongoCollection<Document> methodOvervalued;
+    private final MongoCollection<Document> methodGeneralStore;
 
     public Database() {
-        this.mongoClient = MongoClients.create(CONNECTION_STRING);
-        this.grandExchange = mongoClient.getDatabase(DATABASE_NAME);
-        this.items = grandExchange.getCollection(COLLECTION_ITEMS);
-        this.items.createIndex(Indexes.ascending("id"));
-        this.items.createIndex(Indexes.ascending("timestamp"));
+        MongoClient mongoClient = MongoClients.create(CONNECTION_STRING);
+        MongoDatabase grandExchange = mongoClient.getDatabase(DATABASE_NAME);
+        this.sourceOsBuddy = itemCollection(grandExchange, COLLECTION_SOURCE_OS_BUDDY);
+        this.sourceOfficial = itemCollection(grandExchange, COLLECTION_SOURCE_OFFICIAL);
+        this.methodUndervalued = itemCollection(grandExchange, COLLECTION_METHOD_UNDERVALUED);
+        this.methodOvervalued = itemCollection(grandExchange, COLLECTION_METHOD_OVERVALUED);
+        this.methodGeneralStore = itemCollection(grandExchange, COLLECTION_METHOD_GENERAL_STORE);
     }
 
-    public MongoCollection<Document> getItems() {
-        return items;
+    private static MongoCollection<Document> itemCollection(MongoDatabase database, String name) {
+        var collection = database.getCollection(name);
+        collection.createIndex(Indexes.ascending("id"));
+        collection.createIndex(Indexes.ascending("timestamp"));
+        return collection;
+    }
+
+    public MongoCollection<Document> getSourceOsBuddy() {
+        return sourceOsBuddy;
+    }
+
+    public MongoCollection<Document> getSourceOfficial() {
+        return sourceOfficial;
+    }
+
+    public MongoCollection<Document> getMethodUndervalued() {
+        return methodUndervalued;
+    }
+
+    public MongoCollection<Document> getMethodOvervalued() {
+        return methodOvervalued;
+    }
+
+    public MongoCollection<Document> getMethodGeneralStore() {
+        return methodGeneralStore;
     }
 }

@@ -1,71 +1,59 @@
 package com.hileco.exchange.osbuddy;
 
 import com.hileco.exchange.core.ValueReference;
-import com.hileco.exchange.core.View;
 import org.bson.Document;
 
-import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
-public class OsBuddyView extends View {
+public class OsBuddyView {
 
-    private static final String VIEW_NAME = "osBuddy";
+    private final Document document;
 
     public OsBuddyView(Document document) {
-        super(document, VIEW_NAME);
+        this.document = document;
     }
 
-    public OsBuddyView() {
-        super(new Document(), VIEW_NAME);
-        super.initialize();
+    public ValueReference<String> id() {
+        return new ValueReference<>(document, "id");
+    }
+
+    public ValueReference<LocalDateTime> timestamp() {
+        return new ValueReference<>(document, "timestamp");
     }
 
     public ValueReference<String> name() {
-        return new ValueReference<>(this.get(), "name");
+        return new ValueReference<>(document, "name");
     }
 
     public ValueReference<Boolean> members() {
-        return new ValueReference<>(this.get(), "members");
+        return new ValueReference<>(document, "members");
     }
 
-    public ValueReference<BigDecimal> sp() {
-        return new ValueReference<>(this.get(), "sp");
+    public ValueReference<Double> sp() {
+        return new ValueReference<>(document, "sp");
     }
 
-    public ValueReference<BigDecimal> buyAverage() {
-        return new ValueReference<>(this.get(), "buyAverage");
+    public ValueReference<Double> buyAverage() {
+        return new ValueReference<>(document, "buyAverage");
     }
 
-    public ValueReference<BigDecimal> buyQuantity() {
-        return new ValueReference<>(this.get(), "buyQuantity");
+    public ValueReference<Double> buyQuantity() {
+        return new ValueReference<>(document, "buyQuantity");
     }
 
-    public ValueReference<BigDecimal> sellAverage() {
-        return new ValueReference<>(this.get(), "sellAverage");
+    public ValueReference<Double> sellAverage() {
+        return new ValueReference<>(document, "sellAverage");
     }
 
-    public ValueReference<BigDecimal> sellQuantity() {
-        return new ValueReference<>(this.get(), "sellQuantity");
+    public ValueReference<Double> sellQuantity() {
+        return new ValueReference<>(document, "sellQuantity");
     }
 
-    public ValueReference<BigDecimal> overallAverage() {
-        return new ValueReference<>(this.get(), "overallAverage");
+    public ValueReference<Double> overallAverage() {
+        return new ValueReference<>(document, "overallAverage");
     }
 
-    public ValueReference<BigDecimal> overallQuantity() {
-        return new ValueReference<>(this.get(), "overallQuantity");
-    }
-
-    @Override
-    public boolean isAvailable() {
-        return this.get() != null
-                && name().exists()
-                && members().exists()
-                && sp().exists()
-                && buyAverage().exists()
-                && buyQuantity().exists()
-                && sellAverage().exists()
-                && sellQuantity().exists()
-                && overallAverage().exists()
-                && overallQuantity().exists();
+    public ValueReference<Double> overallQuantity() {
+        return new ValueReference<>(document, "overallQuantity");
     }
 }

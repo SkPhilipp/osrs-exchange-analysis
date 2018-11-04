@@ -1,41 +1,35 @@
 package com.hileco.exchange.wikia;
 
 import com.hileco.exchange.core.ValueReference;
-import com.hileco.exchange.core.View;
 import org.bson.Document;
 
-import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
-public class WikiaView extends View {
+public class WikiaView {
 
-    private static final String VIEW_NAME = "wikia";
+    private final Document document;
 
     public WikiaView(Document document) {
-        super(document, VIEW_NAME);
+        this.document = document;
     }
 
-    public WikiaView() {
-        super(new Document(), VIEW_NAME);
-        super.initialize();
+    public ValueReference<String> id() {
+        return new ValueReference<>(document, "id");
+    }
+
+    public ValueReference<LocalDateTime> timestamp() {
+        return new ValueReference<>(document, "timestamp");
     }
 
     public ValueReference<String> page() {
-        return new ValueReference<>(this.get(), "page");
+        return new ValueReference<>(document, "page");
     }
 
-    public ValueReference<BigDecimal> highAlchemy() {
-        return new ValueReference<>(this.get(), "highAlchemy");
+    public ValueReference<Double> highAlchemy() {
+        return new ValueReference<>(document, "highAlchemy");
     }
 
-    public ValueReference<BigDecimal> lowAlchemy() {
-        return new ValueReference<>(this.get(), "lowAlchemy");
-    }
-
-    @Override
-    public boolean isAvailable() {
-        return this.get() != null
-                && page().exists()
-                && highAlchemy().exists()
-                && lowAlchemy().exists();
+    public ValueReference<Double> lowAlchemy() {
+        return new ValueReference<>(document, "lowAlchemy");
     }
 }

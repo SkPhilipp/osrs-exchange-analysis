@@ -1,6 +1,6 @@
 package com.hileco.exchange.wikia;
 
-public class WikiaSource {
+public class WikiaCommand {
 
     public WikiaView wikiaView(String itemId) {
         /*
@@ -17,6 +17,6 @@ public class WikiaSource {
                 cat | tr '\n' ' ' | awk '{print $1}'
             }
          */
-        return new WikiaView();
+        return new WikiaView(null);
     }
 }
