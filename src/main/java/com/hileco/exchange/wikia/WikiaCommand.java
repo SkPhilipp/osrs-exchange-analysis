@@ -3,6 +3,7 @@ package com.hileco.exchange.wikia;
 public class WikiaCommand {
 
     public WikiaView wikiaView(String itemId) {
+        // https://jsoup.org/apidocs/org/jsoup/select/Selector.html
         /*
             PageName=$1 | tr ' ' '_'
             cache http://oldschoolrunescape.wikia.com/wiki/${PageName} $(source_wikia ${PageName})
