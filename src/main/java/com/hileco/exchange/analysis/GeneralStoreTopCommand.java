@@ -37,17 +37,17 @@ public class GeneralStoreTopCommand implements Runnable {
                 .spliterator()
                 .forEachRemaining(document -> {
                     var generalStore = new GeneralStoreView(document);
-                    var wikia = new WikiaView(database.findLast(SOURCE_WIKIA, generalStore.id().get()).orElseThrow());
-                    var official = new OfficialView(database.findLast(SOURCE_OFFICIAL, generalStore.id().get()).orElseThrow());
+                    var wikia = new WikiaView(database.findLast(SOURCE_WIKIA, generalStore.id.get()).orElseThrow());
+                    var official = new OfficialView(database.findLast(SOURCE_OFFICIAL, generalStore.id.get()).orElseThrow());
                     System.out.println(String.format("%9s %24s %9s %9s %9s %9s %9s %24s",
-                                                     generalStore.id(),
-                                                     official.name(),
-                                                     official.price(),
-                                                     wikia.lowAlchemy().get() * GENERAL_STORE_MULTIPLIER,
-                                                     generalStore.deltaAbsolute().get(),
-                                                     generalStore.deltaAbsoluteStack().get(),
-                                                     generalStore.deltaPercent().get(),
-                                                     generalStore.timestamp().get()));
+                                                     generalStore.id,
+                                                     official.name,
+                                                     official.price,
+                                                     wikia.lowAlchemy.get() * GENERAL_STORE_MULTIPLIER,
+                                                     generalStore.deltaAbsolute.get(),
+                                                     generalStore.deltaAbsoluteStack.get(),
+                                                     generalStore.deltaPercent.get(),
+                                                     generalStore.timestamp.get()));
                 });
     }
 }

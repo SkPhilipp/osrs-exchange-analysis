@@ -35,16 +35,16 @@ public class GeneralStoreAnalyseCommand implements Runnable {
             if (latestWikia.isPresent() && latestOfficial.isPresent()) {
                 var wikia = new WikiaView(latestWikia.get());
                 var official = new OfficialView(latestOfficial.get());
-                var generalStorePrice = wikia.lowAlchemy().get() * GENERAL_STORE_MULTIPLIER;
-                var deltaAbsolute = generalStorePrice - official.price().get();
+                var generalStorePrice = wikia.lowAlchemy.get() * GENERAL_STORE_MULTIPLIER;
+                var deltaAbsolute = generalStorePrice - official.price.get();
                 if (deltaAbsolute > 0) {
                     var document = new Document();
                     var generalStore = new GeneralStoreView(document);
-                    generalStore.id().set(id);
-                    generalStore.timestamp().set(timestamp);
-                    generalStore.deltaAbsolute().set(deltaAbsolute);
-                    generalStore.deltaAbsoluteStack().set(deltaAbsolute * GENERAL_STORE_SELL_STACK_SIZE);
-                    generalStore.deltaPercent().set(deltaAbsolute * 100 / official.price().get());
+                    generalStore.id.set(id);
+                    generalStore.timestamp.set(timestamp);
+                    generalStore.deltaAbsolute.set(deltaAbsolute);
+                    generalStore.deltaAbsoluteStack.set(deltaAbsolute * GENERAL_STORE_SELL_STACK_SIZE);
+                    generalStore.deltaPercent.set(deltaAbsolute * 100 / official.price.get());
                     database.collection(METHOD_OVERVALUED).insertOne(document);
                 }
             }

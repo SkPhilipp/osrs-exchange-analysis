@@ -33,15 +33,15 @@ public class OvervaluedAnalyseCommand implements Runnable {
             if (latestOsBuddy.isPresent() && latestOfficial.isPresent()) {
                 var official = new OfficialView(latestOfficial.get());
                 var osBuddy = new OsBuddyView(latestOsBuddy.get());
-                if (osBuddy.sellQuantity().get() > MINIMUM_SELL_QUANTITY) {
-                    var deltaAbsolute = official.price().get() - osBuddy.sellAverage().get();
+                if (osBuddy.sellQuantity.get() > MINIMUM_SELL_QUANTITY) {
+                    var deltaAbsolute = official.price.get() - osBuddy.sellAverage.get();
                     if (deltaAbsolute > 0) {
                         var document = new Document();
                         var overvalued = new OvervaluedView(document);
-                        overvalued.id().set(id);
-                        overvalued.timestamp().set(timestamp);
-                        overvalued.deltaAbsolute().set(deltaAbsolute);
-                        overvalued.deltaPercent().set(deltaAbsolute * 100 / official.price().get());
+                        overvalued.id.set(id);
+                        overvalued.timestamp.set(timestamp);
+                        overvalued.deltaAbsolute.set(deltaAbsolute);
+                        overvalued.deltaPercent.set(deltaAbsolute * 100 / official.price.get());
                         database.collection(METHOD_OVERVALUED).insertOne(document);
                     }
                 }
