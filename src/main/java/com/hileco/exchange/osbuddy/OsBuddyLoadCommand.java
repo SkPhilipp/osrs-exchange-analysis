@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+import static com.hileco.exchange.core.Database.SOURCE_OS_BUDDY;
 import static picocli.CommandLine.Command;
 import static picocli.CommandLine.Option;
 
@@ -54,7 +55,7 @@ public class OsBuddyLoadCommand implements Runnable {
                     osBuddyView.overallQuantity().set(Currency.parse(item.get("overall_quantity").asText()));
                     documents.add(document);
                 });
-                database.getSourceOsBuddy().insertMany(documents);
+                database.collection(SOURCE_OS_BUDDY).insertMany(documents);
                 System.out.println(String.format("Stored %s items from OsBuddy", documents.size()));
                 if (loop) {
                     Thread.sleep(OSBUDDY_PUBLISHING_INTERVAL);

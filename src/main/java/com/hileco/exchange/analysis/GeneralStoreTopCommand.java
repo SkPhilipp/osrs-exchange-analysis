@@ -1,8 +1,14 @@
 package com.hileco.exchange.analysis;
 
 import com.hileco.exchange.core.Database;
+import com.hileco.exchange.official.OfficialView;
+import com.hileco.exchange.wikia.WikiaView;
 import com.mongodb.client.model.Sorts;
 
+import static com.hileco.exchange.analysis.GeneralStoreAnalyseCommand.GENERAL_STORE_MULTIPLIER;
+import static com.hileco.exchange.core.Database.METHOD_GENERAL_STORE;
+import static com.hileco.exchange.core.Database.SOURCE_OFFICIAL;
+import static com.hileco.exchange.core.Database.SOURCE_WIKIA;
 import static picocli.CommandLine.Command;
 import static picocli.CommandLine.Option;
 
@@ -25,17 +31,19 @@ public class GeneralStoreTopCommand implements Runnable {
                                          "x50",
                                          "Delta%",
                                          "Timestamp"));
-        database.getMethodGeneralStore().find()
+        database.collection(METHOD_GENERAL_STORE).find()
                 .sort(Sorts.descending("deltaPercent", "deltaAbsoluteStack"))
                 .limit(limit)
                 .spliterator()
                 .forEachRemaining(document -> {
                     var generalStore = new GeneralStoreView(document);
+                    var wikia = new WikiaView(database.findLast(SOURCE_WIKIA, generalStore.id().get()).orElseThrow());
+                    var official = new OfficialView(database.findLast(SOURCE_OFFICIAL, generalStore.id().get()).orElseThrow());
                     System.out.println(String.format("%9s %24s %9s %9s %9s %9s %9s %24s",
                                                      generalStore.id(),
-                                                     generalStore.name(),
-                                                     generalStore.officialPrice(),
-                                                     generalStore.generalStorePrice(),
+                                                     official.name(),
+                                                     official.price(),
+                                                     wikia.lowAlchemy().get() * GENERAL_STORE_MULTIPLIER,
                                                      generalStore.deltaAbsolute().get(),
                                                      generalStore.deltaAbsoluteStack().get(),
                                                      generalStore.deltaPercent().get(),

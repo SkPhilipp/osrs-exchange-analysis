@@ -8,6 +8,9 @@ import org.bson.Document;
 
 import java.time.LocalDateTime;
 
+import static com.hileco.exchange.core.Database.METHOD_UNDERVALUED;
+import static com.hileco.exchange.core.Database.SOURCE_OFFICIAL;
+import static com.hileco.exchange.core.Database.SOURCE_OS_BUDDY;
 import static picocli.CommandLine.Command;
 import static picocli.CommandLine.Option;
 
@@ -24,9 +27,9 @@ public class UndervaluedAnalyseCommand implements Runnable {
     public void run() {
         var timestamp = LocalDateTime.now();
         var database = new Database();
-        database.findIds(database.getSourceOsBuddy()).forEachRemaining(id -> {
-            var latestOsBuddy = database.findLast(database.getSourceOsBuddy(), id);
-            var latestOfficial = database.findLast(database.getSourceOfficial(), id);
+        database.findIds(SOURCE_OS_BUDDY).forEachRemaining(id -> {
+            var latestOsBuddy = database.findLast(SOURCE_OS_BUDDY, id);
+            var latestOfficial = database.findLast(SOURCE_OFFICIAL, id);
             if (latestOsBuddy.isPresent() && latestOfficial.isPresent()) {
                 var official = new OfficialView(latestOfficial.get());
                 var osBuddy = new OsBuddyView(latestOsBuddy.get());
@@ -39,13 +42,13 @@ public class UndervaluedAnalyseCommand implements Runnable {
                         undervalued.timestamp().set(timestamp);
                         undervalued.deltaAbsolute().set(deltaAbsolute);
                         undervalued.deltaPercent().set(deltaAbsolute * 100 / official.price().get());
-                        database.getMethodUndervalued().insertOne(document);
+                        database.collection(METHOD_UNDERVALUED).insertOne(document);
                     }
                 }
             }
         });
         if (delete) {
-            database.getMethodOvervalued().deleteMany(Filters.lt("timestamp", timestamp));
+            database.collection(METHOD_UNDERVALUED).deleteMany(Filters.lt("timestamp", timestamp));
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.hileco.exchange.analysis;
 
 import com.hileco.exchange.core.ValueReference;
+import com.mongodb.DBRef;
 import org.bson.Document;
 
 import java.time.LocalDateTime;
@@ -17,20 +18,8 @@ public class GeneralStoreView {
         return new ValueReference<>(document, "id");
     }
 
-    public ValueReference<String> name() {
-        return new ValueReference<>(document, "name");
-    }
-
     public ValueReference<LocalDateTime> timestamp() {
         return new ValueReference<>(document, "timestamp");
-    }
-
-    public ValueReference<Double> officialPrice() {
-        return new ValueReference<>(document, "officialPrice");
-    }
-
-    public ValueReference<Double> generalStorePrice() {
-        return new ValueReference<>(document, "generalStorePrice");
     }
 
     public ValueReference<Double> deltaAbsolute() {
@@ -43,5 +32,13 @@ public class GeneralStoreView {
 
     public ValueReference<Double> deltaPercent() {
         return new ValueReference<>(document, "deltaPercent");
+    }
+
+    public ValueReference<DBRef> official() {
+        return new ValueReference<>(document, "official");
+    }
+
+    public ValueReference<DBRef> wikia() {
+        return new ValueReference<>(document, "wikia");
     }
 }
