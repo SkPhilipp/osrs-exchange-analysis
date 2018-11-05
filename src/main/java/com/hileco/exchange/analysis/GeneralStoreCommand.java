@@ -7,8 +7,6 @@ import com.mongodb.client.model.Sorts;
 
 import static com.hileco.exchange.analysis.GeneralStoreAnalyseCommand.GENERAL_STORE_MULTIPLIER;
 import static com.hileco.exchange.core.Database.METHOD_GENERAL_STORE;
-import static com.hileco.exchange.core.Database.SOURCE_OFFICIAL;
-import static com.hileco.exchange.core.Database.SOURCE_WIKIA;
 import static picocli.CommandLine.Command;
 import static picocli.CommandLine.Option;
 
@@ -37,8 +35,8 @@ public class GeneralStoreCommand implements Runnable {
                 .spliterator()
                 .forEachRemaining(document -> {
                     var generalStore = new GeneralStoreView(document);
-                    var wikia = new WikiaView(database.findLast(SOURCE_WIKIA, generalStore.id.get()).orElseThrow());
-                    var official = new OfficialView(database.findLast(SOURCE_OFFICIAL, generalStore.id.get()).orElseThrow());
+                    var wikia = new WikiaView(database.find(generalStore.wikia.get()).orElseThrow());
+                    var official = new OfficialView(database.find(generalStore.official.get()).orElseThrow());
                     System.out.println(String.format("%9s %24s %9s %9s %9s %9s %9s %24s",
                                                      generalStore.id,
                                                      official.name,

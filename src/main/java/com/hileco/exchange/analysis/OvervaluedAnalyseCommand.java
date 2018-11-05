@@ -27,7 +27,7 @@ public class OvervaluedAnalyseCommand implements Runnable {
     public void run() {
         var timestamp = LocalDateTime.now();
         var database = new Database();
-        database.findIds(SOURCE_OS_BUDDY).forEachRemaining(id -> {
+        database.findIds(SOURCE_OFFICIAL).forEachRemaining(id -> {
             var latestOsBuddy = database.findLast(SOURCE_OS_BUDDY, id);
             var latestOfficial = database.findLast(SOURCE_OFFICIAL, id);
             if (latestOsBuddy.isPresent() && latestOfficial.isPresent()) {

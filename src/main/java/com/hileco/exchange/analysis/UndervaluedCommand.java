@@ -6,8 +6,6 @@ import com.hileco.exchange.osbuddy.OsBuddyView;
 import com.mongodb.client.model.Sorts;
 
 import static com.hileco.exchange.core.Database.METHOD_UNDERVALUED;
-import static com.hileco.exchange.core.Database.SOURCE_OFFICIAL;
-import static com.hileco.exchange.core.Database.SOURCE_OS_BUDDY;
 import static picocli.CommandLine.Command;
 import static picocli.CommandLine.Option;
 
@@ -35,8 +33,8 @@ public class UndervaluedCommand implements Runnable {
                 .spliterator()
                 .forEachRemaining(document -> {
                     var undervalued = new UndervaluedView(document);
-                    var osBuddy = new OsBuddyView(database.findLast(SOURCE_OS_BUDDY, undervalued.id.get()).orElseThrow());
-                    var official = new OfficialView(database.findLast(SOURCE_OFFICIAL, undervalued.id.get()).orElseThrow());
+                    var osBuddy = new OsBuddyView(database.find(undervalued.osBuddy.get()).orElseThrow());
+                    var official = new OfficialView(database.find(undervalued.official.get()).orElseThrow());
                     System.out.println(String.format("%9s %24s %9s %12s %9s %9s %24s",
                                                      undervalued.id,
                                                      official.name,

@@ -6,8 +6,6 @@ import com.hileco.exchange.osbuddy.OsBuddyView;
 import com.mongodb.client.model.Sorts;
 
 import static com.hileco.exchange.core.Database.METHOD_OVERVALUED;
-import static com.hileco.exchange.core.Database.SOURCE_OFFICIAL;
-import static com.hileco.exchange.core.Database.SOURCE_OS_BUDDY;
 import static picocli.CommandLine.Command;
 import static picocli.CommandLine.Option;
 
@@ -35,8 +33,8 @@ public class OvervaluedCommand implements Runnable {
                 .spliterator()
                 .forEachRemaining(document -> {
                     var overvalued = new OvervaluedView(document);
-                    var osBuddy = new OsBuddyView(database.findLast(SOURCE_OS_BUDDY, overvalued.id.get()).orElseThrow());
-                    var official = new OfficialView(database.findLast(SOURCE_OFFICIAL, overvalued.id.get()).orElseThrow());
+                    var osBuddy = new OsBuddyView(database.find(overvalued.osBuddy.get()).orElseThrow());
+                    var official = new OfficialView(database.find(overvalued.official.get()).orElseThrow());
                     System.out.println(String.format("%9s %24s %9s %12s %9s %9s %24s",
                                                      overvalued.id,
                                                      official.name,
