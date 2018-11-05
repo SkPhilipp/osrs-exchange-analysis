@@ -45,6 +45,8 @@ public class GeneralStoreAnalyseCommand implements Runnable {
                     generalStore.deltaAbsolute.set(deltaAbsolute);
                     generalStore.deltaAbsoluteStack.set(deltaAbsolute * GENERAL_STORE_SELL_STACK_SIZE);
                     generalStore.deltaPercent.set(deltaAbsolute * 100 / official.price.get());
+                    generalStore.official.set(official.reference());
+                    generalStore.wikia.set(wikia.reference());
                     database.collection(METHOD_OVERVALUED).insertOne(document);
                 }
             }

@@ -42,6 +42,8 @@ public class UndervaluedAnalyseCommand implements Runnable {
                         undervalued.timestamp.set(timestamp);
                         undervalued.deltaAbsolute.set(deltaAbsolute);
                         undervalued.deltaPercent.set(deltaAbsolute * 100 / official.price.get());
+                        undervalued.official.set(official.reference());
+                        undervalued.osBuddy.set(osBuddy.reference());
                         database.collection(METHOD_UNDERVALUED).insertOne(document);
                     }
                 }

@@ -42,6 +42,8 @@ public class OvervaluedAnalyseCommand implements Runnable {
                         overvalued.timestamp.set(timestamp);
                         overvalued.deltaAbsolute.set(deltaAbsolute);
                         overvalued.deltaPercent.set(deltaAbsolute * 100 / official.price.get());
+                        overvalued.official.set(official.reference());
+                        overvalued.osBuddy.set(osBuddy.reference());
                         database.collection(METHOD_OVERVALUED).insertOne(document);
                     }
                 }

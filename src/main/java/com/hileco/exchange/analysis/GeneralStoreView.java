@@ -5,6 +5,8 @@ import com.hileco.exchange.core.View;
 import com.mongodb.DBRef;
 import org.bson.Document;
 
+import static com.hileco.exchange.core.Database.METHOD_GENERAL_STORE;
+
 public class GeneralStoreView extends View {
 
     public final ValueReference<Double> deltaAbsolute;
@@ -20,5 +22,10 @@ public class GeneralStoreView extends View {
         deltaPercent = new ValueReference<>(document, "deltaPercent");
         official = new ValueReference<>(document, "official");
         wikia = new ValueReference<>(document, "wikia");
+    }
+
+    @Override
+    public DBRef reference() {
+        return new DBRef(METHOD_GENERAL_STORE, this.objectId());
     }
 }

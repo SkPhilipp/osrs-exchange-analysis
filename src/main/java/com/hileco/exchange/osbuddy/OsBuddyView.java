@@ -2,7 +2,10 @@ package com.hileco.exchange.osbuddy;
 
 import com.hileco.exchange.core.ValueReference;
 import com.hileco.exchange.core.View;
+import com.mongodb.DBRef;
 import org.bson.Document;
+
+import static com.hileco.exchange.core.Database.SOURCE_OS_BUDDY;
 
 public class OsBuddyView extends View {
 
@@ -27,5 +30,10 @@ public class OsBuddyView extends View {
         sellQuantity = new ValueReference<>(document, "sellQuantity");
         overallAverage = new ValueReference<>(document, "overallAverage");
         overallQuantity = new ValueReference<>(document, "overallQuantity");
+    }
+
+    @Override
+    public DBRef reference() {
+        return new DBRef(SOURCE_OS_BUDDY, this.objectId());
     }
 }

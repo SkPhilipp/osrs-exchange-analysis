@@ -2,7 +2,10 @@ package com.hileco.exchange.official;
 
 import com.hileco.exchange.core.ValueReference;
 import com.hileco.exchange.core.View;
+import com.mongodb.DBRef;
 import org.bson.Document;
+
+import static com.hileco.exchange.core.Database.SOURCE_OFFICIAL;
 
 public class OfficialView extends View {
 
@@ -29,5 +32,10 @@ public class OfficialView extends View {
         iconLarge = new ValueReference<>(document, "iconLarge");
         members = new ValueReference<>(document, "members");
         name = new ValueReference<>(document, "name");
+    }
+
+    @Override
+    public DBRef reference() {
+        return new DBRef(SOURCE_OFFICIAL, this.objectId());
     }
 }
