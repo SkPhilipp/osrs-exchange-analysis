@@ -17,8 +17,20 @@ public class GeneralStoreView {
         return new ValueReference<>(document, "id");
     }
 
+    public ValueReference<String> name() {
+        return new ValueReference<>(document, "name");
+    }
+
     public ValueReference<LocalDateTime> timestamp() {
         return new ValueReference<>(document, "timestamp");
+    }
+
+    public ValueReference<Double> officialPrice() {
+        return new ValueReference<>(document, "officialPrice");
+    }
+
+    public ValueReference<Double> generalStorePrice() {
+        return new ValueReference<>(document, "generalStorePrice");
     }
 
     public ValueReference<Double> deltaAbsolute() {

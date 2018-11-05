@@ -38,6 +38,9 @@ public class GeneralStoreAnalyseCommand implements Runnable {
                     var generalStore = new GeneralStoreView(document);
                     generalStore.id().set(id);
                     generalStore.timestamp().set(timestamp);
+                    generalStore.name().set(official.name().get());
+                    generalStore.officialPrice().set(official.price().get());
+                    generalStore.generalStorePrice().set(generalStorePrice);
                     generalStore.deltaAbsolute().set(deltaAbsolute);
                     generalStore.deltaAbsoluteStack().set(deltaAbsolute * GENERAL_STORE_SELL_STACK_SIZE);
                     generalStore.deltaPercent().set(deltaAbsolute * 100 / official.price().get());

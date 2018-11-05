@@ -1,6 +1,7 @@
 package com.hileco.exchange;
 
 import com.hileco.exchange.analysis.GeneralStoreAnalyseCommand;
+import com.hileco.exchange.analysis.GeneralStoreTopCommand;
 import com.hileco.exchange.analysis.OvervaluedAnalyseCommand;
 import com.hileco.exchange.analysis.UndervaluedAnalyseCommand;
 import com.hileco.exchange.official.OfficialLoadCommand;
@@ -14,7 +15,8 @@ import static picocli.CommandLine.Command;
         OsBuddyLoadCommand.class,
         UndervaluedAnalyseCommand.class,
         OvervaluedAnalyseCommand.class,
-        GeneralStoreAnalyseCommand.class
+        GeneralStoreAnalyseCommand.class,
+        GeneralStoreTopCommand.class
 })
 public class Commands {
 

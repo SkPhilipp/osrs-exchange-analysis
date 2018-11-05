@@ -2,6 +2,8 @@ package com.hileco.exchange.core;
 
 import org.bson.Document;
 
+import java.util.Objects;
+
 public class ValueReference<T> {
 
     private Document parent;
@@ -23,5 +25,10 @@ public class ValueReference<T> {
 
     public boolean exists() {
         return parent.containsKey(name);
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toString(this.get());
     }
 }
