@@ -14,8 +14,8 @@ import static com.hileco.exchange.core.Database.SOURCE_OS_BUDDY;
 import static picocli.CommandLine.Command;
 import static picocli.CommandLine.Option;
 
-@Command(description = "Analysis method retrieving the top items where the official price is below the actual buy average.",
-        name = "analyse-undervalued")
+@Command(description = "Analysis method to compute the top items where the official price is below the actual buy average.",
+        name = "load-undervalued")
 public class UndervaluedAnalyseCommand implements Runnable {
 
     private static final int MINIMUM_BUY_QUANTITY = 3;

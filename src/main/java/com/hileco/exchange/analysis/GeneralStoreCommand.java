@@ -13,8 +13,8 @@ import static picocli.CommandLine.Command;
 import static picocli.CommandLine.Option;
 
 @Command(description = "Retrieve the top items to vendor.",
-        name = "top-general-store")
-public class GeneralStoreTopCommand implements Runnable {
+        name = "vendor")
+public class GeneralStoreCommand implements Runnable {
 
     @Option(names = {"-n", "--number"}, description = "How many entries to retrieve.")
     private int limit = 30;

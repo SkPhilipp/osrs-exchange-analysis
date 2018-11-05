@@ -14,8 +14,8 @@ import static com.hileco.exchange.core.Database.SOURCE_OS_BUDDY;
 import static picocli.CommandLine.Command;
 import static picocli.CommandLine.Option;
 
-@Command(description = "Analysis method retrieving the top items where the official price is above the actual sell average.",
-        name = "analyse-overvalued")
+@Command(description = "Analysis method to compute the top items where the official price is above the actual sell average.",
+        name = "load-overvalued")
 public class OvervaluedAnalyseCommand implements Runnable {
 
     private static final int MINIMUM_SELL_QUANTITY = 3;

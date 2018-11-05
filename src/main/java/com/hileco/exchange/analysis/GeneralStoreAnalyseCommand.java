@@ -8,6 +8,7 @@ import org.bson.Document;
 
 import java.time.LocalDateTime;
 
+import static com.hileco.exchange.core.Database.METHOD_GENERAL_STORE;
 import static com.hileco.exchange.core.Database.METHOD_OVERVALUED;
 import static com.hileco.exchange.core.Database.SOURCE_OFFICIAL;
 import static com.hileco.exchange.core.Database.SOURCE_OS_BUDDY;
@@ -15,8 +16,8 @@ import static com.hileco.exchange.core.Database.SOURCE_WIKIA;
 import static picocli.CommandLine.Command;
 import static picocli.CommandLine.Option;
 
-@Command(description = "Analysis method retrieving the top items to vendor.",
-        name = "analyse-general-store")
+@Command(description = "Analysis method to compute the top items to vendor.",
+        name = "load-vendor")
 public class GeneralStoreAnalyseCommand implements Runnable {
 
     static final double GENERAL_STORE_MULTIPLIER = 0.26d;
@@ -52,7 +53,7 @@ public class GeneralStoreAnalyseCommand implements Runnable {
             }
         });
         if (delete) {
-            database.collection(METHOD_OVERVALUED).deleteMany(Filters.lt("timestamp", timestamp));
+            database.collection(METHOD_GENERAL_STORE).deleteMany(Filters.lt("timestamp", timestamp));
         }
     }
 }

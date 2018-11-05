@@ -1,8 +1,13 @@
 package com.hileco.exchange.wikia;
 
-public class WikiaCommand {
+import static picocli.CommandLine.Command;
 
-    public WikiaView wikiaView(String itemId) {
+@Command(description = "Loads in the Wikia source.",
+        name = "load-wikia")
+public class WikiaLoadCommand implements Runnable {
+
+    @Override
+    public void run() {
         // https://jsoup.org/apidocs/org/jsoup/select/Selector.html
         /*
             PageName=$1 | tr ' ' '_'
@@ -18,6 +23,5 @@ public class WikiaCommand {
                 cat | tr '\n' ' ' | awk '{print $1}'
             }
          */
-        return new WikiaView(null);
     }
 }

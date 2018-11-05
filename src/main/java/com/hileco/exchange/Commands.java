@@ -1,13 +1,14 @@
 package com.hileco.exchange;
 
 import com.hileco.exchange.analysis.GeneralStoreAnalyseCommand;
-import com.hileco.exchange.analysis.GeneralStoreTopCommand;
+import com.hileco.exchange.analysis.GeneralStoreCommand;
 import com.hileco.exchange.analysis.OvervaluedAnalyseCommand;
-import com.hileco.exchange.analysis.OvervaluedTopCommand;
+import com.hileco.exchange.analysis.OvervaluedCommand;
 import com.hileco.exchange.analysis.UndervaluedAnalyseCommand;
-import com.hileco.exchange.analysis.UndervaluedTopCommand;
+import com.hileco.exchange.analysis.UndervaluedCommand;
 import com.hileco.exchange.official.OfficialLoadCommand;
 import com.hileco.exchange.osbuddy.OsBuddyLoadCommand;
+import com.hileco.exchange.wikia.WikiaLoadCommand;
 import picocli.CommandLine;
 
 import static picocli.CommandLine.Command;
@@ -15,12 +16,13 @@ import static picocli.CommandLine.Command;
 @Command(description = "Tool for working with a virtual economy.", name = "exchange", subcommands = {
         OfficialLoadCommand.class,
         OsBuddyLoadCommand.class,
+        WikiaLoadCommand.class,
         UndervaluedAnalyseCommand.class,
-        UndervaluedTopCommand.class,
         OvervaluedAnalyseCommand.class,
-        OvervaluedTopCommand.class,
         GeneralStoreAnalyseCommand.class,
-        GeneralStoreTopCommand.class
+        UndervaluedCommand.class,
+        OvervaluedCommand.class,
+        GeneralStoreCommand.class
 })
 public class Commands {
 

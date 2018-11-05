@@ -12,8 +12,8 @@ import static picocli.CommandLine.Command;
 import static picocli.CommandLine.Option;
 
 @Command(description = "Retrieve the top items currently overvalued by the Grand Exchange.",
-        name = "top-overvalued")
-public class OvervaluedTopCommand implements Runnable {
+        name = "overvalued")
+public class OvervaluedCommand implements Runnable {
 
     @Option(names = {"-n", "--number"}, description = "How many entries to retrieve.")
     private int limit = 30;
