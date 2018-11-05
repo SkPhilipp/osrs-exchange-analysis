@@ -9,6 +9,7 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Indexes;
 import com.mongodb.client.model.Sorts;
 import org.bson.Document;
+import org.bson.types.ObjectId;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -65,7 +66,7 @@ public class Database {
     }
 
     public Optional<Document> findLast(String collection, String id) {
-        try (var cursor = this.collections.get(collection).find(Filters.eq("id", id))
+        try (var cursor = this.collections.get(collection).find(Filters.eq("id", new ObjectId(id)))
                 .sort(Sorts.descending("timestamp"))
                 .limit(1)
                 .iterator()) {

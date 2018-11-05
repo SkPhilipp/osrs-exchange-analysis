@@ -1,59 +1,31 @@
 package com.hileco.exchange.osbuddy;
 
 import com.hileco.exchange.core.ValueReference;
+import com.hileco.exchange.core.View;
 import org.bson.Document;
 
-import java.time.LocalDateTime;
+public class OsBuddyView extends View {
 
-public class OsBuddyView {
-
-    private final Document document;
+    public final ValueReference<String> name;
+    public final ValueReference<Boolean> members;
+    public final ValueReference<Double> sp;
+    public final ValueReference<Double> buyAverage;
+    public final ValueReference<Double> buyQuantity;
+    public final ValueReference<Double> sellAverage;
+    public final ValueReference<Double> sellQuantity;
+    public final ValueReference<Double> overallAverage;
+    public final ValueReference<Double> overallQuantity;
 
     public OsBuddyView(Document document) {
-        this.document = document;
-    }
-
-    public ValueReference<String> id() {
-        return new ValueReference<>(document, "id");
-    }
-
-    public ValueReference<LocalDateTime> timestamp() {
-        return new ValueReference<>(document, "timestamp");
-    }
-
-    public ValueReference<String> name() {
-        return new ValueReference<>(document, "name");
-    }
-
-    public ValueReference<Boolean> members() {
-        return new ValueReference<>(document, "members");
-    }
-
-    public ValueReference<Double> sp() {
-        return new ValueReference<>(document, "sp");
-    }
-
-    public ValueReference<Double> buyAverage() {
-        return new ValueReference<>(document, "buyAverage");
-    }
-
-    public ValueReference<Double> buyQuantity() {
-        return new ValueReference<>(document, "buyQuantity");
-    }
-
-    public ValueReference<Double> sellAverage() {
-        return new ValueReference<>(document, "sellAverage");
-    }
-
-    public ValueReference<Double> sellQuantity() {
-        return new ValueReference<>(document, "sellQuantity");
-    }
-
-    public ValueReference<Double> overallAverage() {
-        return new ValueReference<>(document, "overallAverage");
-    }
-
-    public ValueReference<Double> overallQuantity() {
-        return new ValueReference<>(document, "overallQuantity");
+        super(document);
+        name = new ValueReference<>(document, "name");
+        members = new ValueReference<>(document, "members");
+        sp = new ValueReference<>(document, "sp");
+        buyAverage = new ValueReference<>(document, "buyAverage");
+        buyQuantity = new ValueReference<>(document, "buyQuantity");
+        sellAverage = new ValueReference<>(document, "sellAverage");
+        sellQuantity = new ValueReference<>(document, "sellQuantity");
+        overallAverage = new ValueReference<>(document, "overallAverage");
+        overallQuantity = new ValueReference<>(document, "overallQuantity");
     }
 }

@@ -1,31 +1,17 @@
 package com.hileco.exchange.analysis;
 
 import com.hileco.exchange.core.ValueReference;
+import com.hileco.exchange.core.View;
 import org.bson.Document;
 
-import java.time.LocalDateTime;
+public class OvervaluedView extends View {
 
-public class OvervaluedView {
-
-    private final Document document;
+    public final ValueReference<Double> deltaAbsolute;
+    public final ValueReference<Double> deltaPercent;
 
     public OvervaluedView(Document document) {
-        this.document = document;
-    }
-
-    public ValueReference<String> id() {
-        return new ValueReference<>(document, "id");
-    }
-
-    public ValueReference<LocalDateTime> timestamp() {
-        return new ValueReference<>(document, "timestamp");
-    }
-
-    public ValueReference<Double> deltaAbsolute() {
-        return new ValueReference<>(document, "deltaAbsolute");
-    }
-
-    public ValueReference<Double> deltaPercent() {
-        return new ValueReference<>(document, "deltaPercent");
+        super(document);
+        deltaAbsolute = new ValueReference<>(document, "deltaAbsolute");
+        deltaPercent = new ValueReference<>(document, "deltaPercent");
     }
 }

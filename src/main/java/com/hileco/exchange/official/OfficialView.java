@@ -1,63 +1,33 @@
 package com.hileco.exchange.official;
 
 import com.hileco.exchange.core.ValueReference;
+import com.hileco.exchange.core.View;
 import org.bson.Document;
 
-import java.time.LocalDateTime;
+public class OfficialView extends View {
 
-public class OfficialView {
-
-    private final Document document;
+    public final ValueReference<Double> price;
+    public final ValueReference<Double> priceChange;
+    public final ValueReference<String> price180;
+    public final ValueReference<String> price90;
+    public final ValueReference<String> price30;
+    public final ValueReference<String> description;
+    public final ValueReference<String> icon;
+    public final ValueReference<String> iconLarge;
+    public final ValueReference<Boolean> members;
+    public final ValueReference<String> name;
 
     public OfficialView(Document document) {
-        this.document = document;
-    }
-
-    public ValueReference<String> id() {
-        return new ValueReference<>(document, "id");
-    }
-
-    public ValueReference<LocalDateTime> timestamp() {
-        return new ValueReference<>(document, "timestamp");
-    }
-
-    public ValueReference<Double> price() {
-        return new ValueReference<>(document, "price");
-    }
-
-    public ValueReference<Double> priceChange() {
-        return new ValueReference<>(document, "priceChange");
-    }
-
-    public ValueReference<String> price180() {
-        return new ValueReference<>(document, "price180");
-    }
-
-    public ValueReference<String> price90() {
-        return new ValueReference<>(document, "price90");
-    }
-
-    public ValueReference<String> price30() {
-        return new ValueReference<>(document, "price30");
-    }
-
-    public ValueReference<String> description() {
-        return new ValueReference<>(document, "description");
-    }
-
-    public ValueReference<String> icon() {
-        return new ValueReference<>(document, "icon");
-    }
-
-    public ValueReference<String> iconLarge() {
-        return new ValueReference<>(document, "iconLarge");
-    }
-
-    public ValueReference<Boolean> members() {
-        return new ValueReference<>(document, "members");
-    }
-
-    public ValueReference<String> name() {
-        return new ValueReference<>(document, "name");
+        super(document);
+        price = new ValueReference<>(document, "price");
+        priceChange = new ValueReference<>(document, "priceChange");
+        price180 = new ValueReference<>(document, "price180");
+        price90 = new ValueReference<>(document, "price90");
+        price30 = new ValueReference<>(document, "price30");
+        description = new ValueReference<>(document, "description");
+        icon = new ValueReference<>(document, "icon");
+        iconLarge = new ValueReference<>(document, "iconLarge");
+        members = new ValueReference<>(document, "members");
+        name = new ValueReference<>(document, "name");
     }
 }
