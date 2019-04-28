@@ -17,7 +17,7 @@ import java.util.Spliterator;
 
 public class Database {
 
-    private static final String CONNECTION_STRING = "mongodb+srv://pepe:VzGP54FpW7ctWaTh@thegrandexchange-zules.azure.mongodb.net/test?retryWrites=true";
+    private static final String CONNECTION_STRING = "mongodb+srv://pepe:VzGP54FpW7ctWaTh@cluster0-zules.mongodb.net/test?retryWrites=true";
     private static final String DATABASE_NAME = "grandexchange";
     public static final String SOURCE_OS_BUDDY = "sourceOsBuddy";
     public static final String SOURCE_OFFICIAL = "sourceOfficial";
