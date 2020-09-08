@@ -1,5 +1,7 @@
 # Exchange
 
+Analyses products to gets the most profit out of the Grand Exchange! (in the game, ofcourse..)
+
     ./gradlew clean build
     java -jar build/libs/exchange.jar load-official
     java -jar build/libs/exchange.jar load-osbuddy
@@ -24,3 +26,5 @@
           overvalued        Retrieve the top items currently overvalued by the Grand
                               Exchange.
           vendor            Retrieve the top items to vendor.
+
+Note: This project has an old connection string somewhere in Database.java / Database.kt, you'll have to update it if you want to get it to work.
